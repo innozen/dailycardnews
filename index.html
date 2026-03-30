@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📈 데일리 투자 뉴스 | 2026.03.30</title>
+  <meta name="description" content="InvestingLive RSS 피드를 분석하여 생성된 데일리 투자 카드 뉴스. 미-이란 전쟁, 유가, 채권시장 핵심 요약." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #050a14;
+      --bg-secondary: #0b1525;
+      --bg-card: rgba(255,255,255,0.04);
+      --bg-card-hover: rgba(255,255,255,0.07);
+      --border: rgba(255,255,255,0.08);
+      --border-glow: rgba(99, 179, 237, 0.3);
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted: #4a5568;
+      --accent-blue: #63b3ed;
+      --accent-cyan: #4fd1c5;
+      --accent-red: #fc8181;
+      --accent-orange: #f6ad55;
+      --accent-green: #68d391;
+      --accent-purple: #b794f4;
+      --accent-yellow: #fbd38d;
+      --gradient-war: linear-gradient(135deg, #9b2335 0%, #c0392b 50%, #e74c3c 100%);
+      --gradient-oil: linear-gradient(135deg, #7b4f00 0%, #c0873a 50%, #f6ad55 100%);
+      --gradient-bond: linear-gradient(135deg, #1a3a6b 0%, #2c6bb0 50%, #63b3ed 100%);
+      --shadow-card: 0 8px 32px rgba(0,0,0,0.4);
+      --shadow-glow-red: 0 0 30px rgba(252, 129, 129, 0.15);
+      --shadow-glow-orange: 0 0 30px rgba(246, 173, 85, 0.15);
+      --shadow-glow-blue: 0 0 30px rgba(99, 179, 237, 0.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background animated grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99,179,237,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      padding: 40px 0 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99,179,237,0.1);
+      border: 1px solid rgba(99,179,237,0.3);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-blue);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    h1.main-title {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      animation: fadeDown 0.6s ease 0.1s both;
+    }
+
+    h1.main-title .highlight {
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      animation: fadeDown 0.6s ease 0.2s both;
+    }
+
+    .header-meta span { color: var(--text-secondary); }
+
+    /* ─── MARKET TICKER ─── */
+    .ticker-wrap {
+      background: rgba(255,255,255,0.03);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      padding: 10px 0;
+      margin-bottom: 40px;
+      animation: fadeDown 0.6s ease 0.3s both;
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      width: max-content;
+      animation: ticker 35s linear infinite;
+    }
+
+    .ticker-track:hover { animation-play-state: paused; }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 28px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      white-space: nowrap;
+      border-right: 1px solid var(--border);
+    }
+
+    .ticker-label { color: var(--text-muted); }
+    .ticker-value { font-weight: 600; }
+    .ticker-change.up { color: var(--accent-green); }
+    .ticker-change.down { color: var(--accent-red); }
+
+    /* ─── SECTION TITLES ─── */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section-label h2 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── 3-LINE SUMMARY ─── */
+    .summary-section {
+      margin-bottom: 48px;
+    }
+
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .summary-cards { grid-template-columns: 1fr; }
+    }
+
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .summary-card:nth-child(1) { animation-delay: 0.1s; }
+    .summary-card:nth-child(2) { animation-delay: 0.2s; }
+    .summary-card:nth-child(3) { animation-delay: 0.3s; }
+
+    .summary-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-glow);
+      box-shadow: var(--shadow-card);
+    }
+
+    .summary-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .summary-card.card-war::before { background: var(--gradient-war); box-shadow: var(--shadow-glow-red); }
+    .summary-card.card-oil::before { background: var(--gradient-oil); box-shadow: var(--shadow-glow-orange); }
+    .summary-card.card-bond::before { background: var(--gradient-bond); box-shadow: var(--shadow-glow-blue); }
+
+    .card-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    .card-war .card-num { color: var(--accent-red); }
+    .card-oil .card-num { color: var(--accent-orange); }
+    .card-bond .card-num { color: var(--accent-blue); }
+
+    .summary-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+
+    /* ─── CARD NEWS SECTION ─── */
+    .card-news-section { margin-bottom: 48px; }
+
+    .news-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .news-card:nth-child(1) { animation-delay: 0.1s; }
+    .news-card:nth-child(2) { animation-delay: 0.2s; }
+    .news-card:nth-child(3) { animation-delay: 0.3s; }
+
+    .news-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .card-header {
+      padding: 24px 28px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .war-icon { background: rgba(252,129,129,0.15); }
+    .oil-icon { background: rgba(246,173,85,0.15); }
+    .bond-icon { background: rgba(99,179,237,0.15); }
+
+    .card-header-text { flex: 1; }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+
+    .tag-war { background: rgba(252,129,129,0.2); color: var(--accent-red); }
+    .tag-oil { background: rgba(246,173,85,0.2); color: var(--accent-orange); }
+    .tag-bond { background: rgba(99,179,237,0.2); color: var(--accent-blue); }
+
+    .card-header-text h3 {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--text-primary);
+    }
+
+    .card-body {
+      padding: 20px 28px 28px;
+    }
+
+    .card-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 20px;
+    }
+
+    .card-summary {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .stat-value.up { color: var(--accent-green); }
+    .stat-value.down { color: var(--accent-red); }
+    .stat-value.neutral { color: var(--accent-yellow); }
+
+    /* Key points */
+    .key-points {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+
+    .key-points li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .key-points li:last-child { border-bottom: none; }
+
+    .key-points li::before {
+      content: '▸';
+      font-size: 11px;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .card-war .key-points li::before { color: var(--accent-red); }
+    .card-oil-full .key-points li::before { color: var(--accent-orange); }
+    .card-bond-full .key-points li::before { color: var(--accent-blue); }
+
+    /* Advice box */
+    .advice-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-left: 3px solid;
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .card-war .advice-box { border-left-color: var(--accent-red); }
+    .card-oil-full .advice-box { border-left-color: var(--accent-orange); }
+    .card-bond-full .advice-box { border-left-color: var(--accent-blue); }
+
+    .advice-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .card-war .advice-label { color: var(--accent-red); }
+    .card-oil-full .advice-label { color: var(--accent-orange); }
+    .card-bond-full .advice-label { color: var(--accent-blue); }
+
+    .advice-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0 40px;
+      text-align: center;
+    }
+
+    .footer-schedule {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 12px;
+    }
+
+    .footer-schedule .sep { color: var(--border); }
+    .footer-schedule span { color: var(--text-secondary); }
+
+    .footer-note {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .footer-note a {
+      color: var(--accent-blue);
+      text-decoration: none;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-badge">
+      <span class="badge-dot"></span>
+      LIVE · 자동 업데이트 오전 09:00
+    </div>
+    <h1 class="main-title">
+      <span class="highlight">데일리 투자 뉴스</span><br />카드 브리핑
+    </h1>
+    <p class="header-meta">
+      분석 기준 <span>2026.03.30 22:14 KST</span> &nbsp;·&nbsp; 출처 <span>InvestingLive RSS</span>
+    </p>
+  </header>
+
+</div>
+
+<!-- MARKET TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="tickerTrack">
+    <!-- items are doubled for seamless loop -->
+    <div class="ticker-item"><span class="ticker-label">WTI 원유</span><span class="ticker-value">$101.67</span><span class="ticker-change up">▲ +1.8%</span></div>
+    <div class="ticker-item"><span class="ticker-label">S&P500 선물</span><span class="ticker-value">6,400</span><span class="ticker-change up">▲ +0.5%</span></div>
+    <div class="ticker-item"><span class="ticker-label">미 10년물</span><span class="ticker-value">4.39%</span><span class="ticker-change down">▼ -5bp</span></div>
+    <div class="ticker-item"><span class="ticker-label">금</span><span class="ticker-value">$4,530</span><span class="ticker-change up">▲ +0.8%</span></div>
+    <div class="ticker-item"><span class="ticker-label">은</span><span class="ticker-value">$70.99</span><span class="ticker-change up">▲ +2.0%</span></div>
+    <div class="ticker-item"><span class="ticker-label">USD/JPY</span><span class="ticker-value">159.55</span><span class="ticker-change down">▼ -0.5%</span></div>
+    <div class="ticker-item"><span class="ticker-label">EUR/USD</span><span class="ticker-value">1.1495</span><span class="ticker-change down">▼ -0.1%</span></div>
+    <div class="ticker-item"><span class="ticker-label">나스닥</span><span class="ticker-value">21,000 이하</span><span class="ticker-change down">▼ 6개월 低</span></div>
+    <div class="ticker-item"><span class="ticker-label">브렌트유</span><span class="ticker-value">$110+</span><span class="ticker-change up">▲ 봉쇄 지속</span></div>
+    <div class="ticker-item"><span class="ticker-label">비트코인</span><span class="ticker-value">전주比</span><span class="ticker-change down">▼ -4.2%</span></div>
+    <!-- duplicated -->
+    <div class="ticker-item"><span class="ticker-label">WTI 원유</span><span class="ticker-value">$101.67</span><span class="ticker-change up">▲ +1.8%</span></div>
+    <div class="ticker-item"><span class="ticker-label">S&P500 선물</span><span class="ticker-value">6,400</span><span class="ticker-change up">▲ +0.5%</span></div>
+    <div class="ticker-item"><span class="ticker-label">미 10년물</span><span class="ticker-value">4.39%</span><span class="ticker-change down">▼ -5bp</span></div>
+    <div class="ticker-item"><span class="ticker-label">금</span><span class="ticker-value">$4,530</span><span class="ticker-change up">▲ +0.8%</span></div>
+    <div class="ticker-item"><span class="ticker-label">은</span><span class="ticker-value">$70.99</span><span class="ticker-change up">▲ +2.0%</span></div>
+    <div class="ticker-item"><span class="ticker-label">USD/JPY</span><span class="ticker-value">159.55</span><span class="ticker-change down">▼ -0.5%</span></div>
+    <div class="ticker-item"><span class="ticker-label">EUR/USD</span><span class="ticker-value">1.1495</span><span class="ticker-change down">▼ -0.1%</span></div>
+    <div class="ticker-item"><span class="ticker-label">나스닥</span><span class="ticker-value">21,000 이하</span><span class="ticker-change down">▼ 6개월 低</span></div>
+    <div class="ticker-item"><span class="ticker-label">브렌트유</span><span class="ticker-value">$110+</span><span class="ticker-change up">▲ 봉쇄 지속</span></div>
+    <div class="ticker-item"><span class="ticker-label">비트코인</span><span class="ticker-value">전주比</span><span class="ticker-change down">▼ -4.2%</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 3-LINE SUMMARY -->
+  <section class="summary-section">
+    <div class="section-label">
+      <h2>🔹 오늘의 3대 핵심 타이틀</h2>
+    </div>
+    <div class="summary-cards">
+      <div class="summary-card card-war">
+        <div class="card-num">01 / 지정학</div>
+        <h3>미-이란 협상 공전 — 4월 6일 휴전 마감 앞두고 전선 확대 위기</h3>
+      </div>
+      <div class="summary-card card-oil">
+        <div class="card-num">02 / 에너지·물가</div>
+        <h3>유가 $101 재돌파, 유럽 CPI 급등 — ECB 금리 인상 시나리오 부상</h3>
+      </div>
+      <div class="summary-card card-bond">
+        <div class="card-num">03 / 채권·환율</div>
+        <h3>대형 채권운용사 "시장이 성장 둔화 위험 과소평가" — BOJ 엔화 개입 경고</h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARD NEWS -->
+  <section class="card-news-section">
+    <div class="section-label">
+      <h2>🎴 데일리 카드 뉴스</h2>
+    </div>
+
+    <!-- CARD 1: WAR -->
+    <article class="news-card card-war" id="card-1">
+      <div class="card-header">
+        <div class="card-icon war-icon">⚔️</div>
+        <div class="card-header-text">
+          <span class="card-tag tag-war">지정학 / 주요 이슈</span>
+          <h3>이란 "미국 제안은 비현실적" — 휴전 마감 D-7, 外交 교착 심화</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-divider"></div>
+        <p class="card-summary">
+          트럼프 대통령은 "이란과 협상이 잘 진행되고 있다"고 발표했지만, 이란 외무부 대변인은 "공식 대화는 없으며 계획도 없다"고 즉각 반박했습니다. 파키스탄이 중재자를 자처하며 이슬라마바드에서 미-이란 회담 주선을 발표했지만, 미국 백악관의 공식 확인은 없는 상태입니다. 4월 6일(현지 화요일) 휴전 기한이 7일 앞으로 다가온 가운데 후티 반군의 이스라엘 공격, 테헤란 정전 피해 등 분쟁이 지역 전선으로 확대되고 있습니다.
+        </p>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-label">WTI 원유</div>
+            <div class="stat-value neutral">$101.67</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">휴전 마감까지</div>
+            <div class="stat-value down">D-7</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">미국 S&P500</div>
+            <div class="stat-value down">5주 연속↓</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">나스닥</div>
+            <div class="stat-value down">&lt;21,000</div>
+          </div>
+        </div>
+        <ul class="key-points">
+          <li>트럼프 "이란에서 새로운 합리적 정권과 협상 중" 발표, 이란은 공식 부인</li>
+          <li>파키스탄·사우디·터키·이집트가 이슬라마바드 회동, 호르무즈 해협 재개 논의</li>
+          <li>루비오 국무부 장관 "전쟁은 앞으로 2~4주 더 지속"</li>
+          <li>미 해병대 수천 명 추가 파견 중 — 지상전 가능성 옵션 유지</li>
+          <li>이란 의회 의장 "협상 논의는 미국 지상 공격의 연막" 경고</li>
+        </ul>
+        <div class="advice-box">
+          <div>
+            <div class="advice-label">💡 투자자 한 줄 전략</div>
+            <div class="advice-text">4월 6일 마감 전까지 '외교 돌파 기대'와 '에스컬레이션 리스크'가 공존 — 지정학 ETF·금·에너지주 헤지 포지션 유지 권고.</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- CARD 2: OIL & INFLATION -->
+    <article class="news-card card-oil-full" id="card-2" style="--shadow-glow: var(--shadow-glow-orange);">
+      <div class="card-header">
+        <div class="card-icon oil-icon">🛢️</div>
+        <div class="card-header-text">
+          <span class="card-tag tag-oil">에너지 · 시장 영향</span>
+          <h3>유가 $101 돌파 — 유럽 인플레이션 급등, ECB 금리 인상 재점화</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-divider"></div>
+        <p class="card-summary">
+          호르무즈 해협 봉쇄가 지속되면서 WTI 원유는 장중 $103까지 치솟았습니다. 이에 따라 독일 각 주(州) 3월 소비자물가지수(CPI)가 전월 대비 1.1~1.2% 급등하였으며, 독일 전체 CPI는 2.7%(예상치)로 2024년 1월 이후 최고치 전망입니다. ECB가 4월 회의에서 금리 인상에 나설 확률은 64%까지 상승, 연말까지 총 75bp 긴축이 시장에 반영되고 있습니다. 유럽 경제 심리지수는 위축, 소비자 인플레 기대는 2022년 7월 이후 최고인 43.4로 치솟았습니다.
+        </p>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-label">WTI 원유</div>
+            <div class="stat-value up">$101.67</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">독일 CPI 예상</div>
+            <div class="stat-value neutral">+2.7% YoY</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">ECB 4월 인상 확률</div>
+            <div class="stat-value neutral">64%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">연말 긴축 총량</div>
+            <div class="stat-value neutral">+75bp</div>
+          </div>
+        </div>
+        <ul class="key-points">
+          <li>바이에른·작센·노르트라인-베스트팔렌 등 독일 주요 州 CPI 2월比 대폭 상승</li>
+          <li>유럽 소비자 인플레이션 기대지수 43.4 — 2022년 7월 이후 최고치</li>
+          <li>ECB 빌루아 총재 "행동 준비됐으나 인상 시기는 논의 이른 단계"</li>
+          <li>베센트 美재무 "시장은 충분한 공급 상태" 주장했지만 유가는 반응 안 해</li>
+          <li>미시건 소비자심리지수 3월 55.5 — 6개월 만에 최저, 가솔린 가격 직격탄</li>
+        </ul>
+        <div class="advice-box" style="border-left-color: var(--accent-orange);">
+          <div>
+            <div class="advice-label" style="color:var(--accent-orange);">💡 투자자 한 줄 전략</div>
+            <div class="advice-text">유럽 인플레이션 재발화로 채권 매도·유럽 에너지 인프라 기업 선별 매수; 소비재·항공주 단기 익스포저 축소.</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- CARD 3: BOND & FX -->
+    <article class="news-card card-bond-full" id="card-3">
+      <div class="card-header">
+        <div class="card-icon bond-icon">📊</div>
+        <div class="card-header-text">
+          <span class="card-tag tag-bond">채권 · 환율 · 전망</span>
+          <h3>PIMCO·JPM "채권시장 성장 둔화 위험 과소평가" — BOJ 엔화 160엔 개입 경고</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-divider"></div>
+        <p class="card-summary">
+          PIMCO, JP모건, 블랙록 등 대형 채권운용사들이 "시장이 인플레이션에 집중한 나머지 성장 침체 리스크를 과소평가하고 있다"고 경고했습니다. 30년 국채 금리는 2023년 이후 최고치인 5% 근방까지 상승했지만, 에너지 쇼크가 결국 소비·기업 투자를 위축시켜 금리를 되돌릴 수 있다는 논리입니다. 한편 일본은행은 USD/JPY가 160엔을 돌파하자 구두 개입으로 급락 유도, 현재 159.55 수준에서 거래 중입니다. 미 연준(Fed) 의장 파월은 FOMC 발표 이후 추가 언급 없이 중립 기조 유지 예정입니다.
+        </p>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-label">미 10년물</div>
+            <div class="stat-value up">4.39%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">미 30년물</div>
+            <div class="stat-value neutral">~5.00%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">USD/JPY</div>
+            <div class="stat-value down">159.55</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">금</div>
+            <div class="stat-value up">$4,530</div>
+          </div>
+        </div>
+        <ul class="key-points">
+          <li>PIMCO·JPM·컬럼비아 스레드니들 "단기 인플레보다 경기 침체 국면에 먼저 대비"</li>
+          <li>30년물 국채 금리 2023년 이후 최고 인근 — 역사적 진입 구간 주목</li>
+          <li>BOJ 미무라 차관 "엔화 투기적 움직임에 단호한 조치 가능" 경고 발언</li>
+          <li>우에다 BOJ 총재 엔화 중요성 강조 → USD/JPY 160.5대 → 159.5 급락</li>
+          <li>월말·분기말 리밸런싱 달러 매수 수요 → 단기 달러 추가 강세 가능성</li>
+        </ul>
+        <div class="advice-box" style="border-left-color: var(--accent-blue);">
+          <div>
+            <div class="advice-label" style="color:var(--accent-blue);">💡 투자자 한 줄 전략</div>
+            <div class="advice-text">장기채 수익률 고점 부근 — 경기둔화 시나리오 대비 단기물 비중 확대 및 달러 단기 강세 활용 후 엔화 반등 포지션 준비.</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-schedule">
+      <span>🔄 자동 업데이트</span>
+      <span class="sep">|</span>
+      <span>매일 오전 09:00 KST</span>
+      <span class="sep">|</span>
+      <span>RSS → 번역 → 카드 생성</span>
+    </div>
+    <p class="footer-note">
+      데이터 출처: <a href="https://investinglive.com/feed/news" target="_blank" rel="noopener">InvestingLive.com RSS Feed</a>
+      &nbsp;·&nbsp; 본 내용은 투자 권유가 아닌 정보 제공 목적입니다.
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
