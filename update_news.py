@@ -148,7 +148,7 @@ def update_html(data):
     print("index.html successfully updated!")
 
 if __name__ == "__main__":
-    rss_url = "https://finance.yahoo.com/news/rss"
+    rss_url = "https://investinglive.com/feed/news"
     print("Fetching RSS from:", rss_url)
     news_text = fetch_rss(rss_url)
     print(f"Fetched {news_text.count('[')} articles.")
