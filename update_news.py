@@ -35,6 +35,8 @@ def fetch_rss(url):
 def generate_content(news_text):
     prompt = f"""
 You are an expert financial news editor. Based on the following latest news extracts, create a Korean summary for a "Daily Card News" webpage.
+The target audience consists of retail investors, so use very clear, simple, and concise language.
+Use appropriate emojis in `summary_title`, `article_title`, and `key_points` to make them visually engaging.
 Output a JSON object with this EXACT structure (No markdown fences, no extra text):
 {{
   "cards": [
@@ -45,20 +47,21 @@ Output a JSON object with this EXACT structure (No markdown fences, no extra tex
       "tag_class": "tag-war",
       "tag_text": "지정학 / 주요 이슈",
       "summary_num": "01 / 지정학",
-      "summary_title": "뉴스 요약 제목",
-      "article_title": "상세 기사 제목",
-      "article_summary": "기사 본문 요약 (3~4문장)",
+      "summary_title": "뉴스 요약 제목 (이모지 포함)",
+      "article_title": "상세 기사 제목 (이모지 포함)",
+      "article_summary": "기사 본문 요약 (최대한 쉽고 간결하게, 1~2문장)",
       "key_points": [
-        "핵심 포인트 1",
-        "핵심 포인트 2",
-        "핵심 포인트 3"
+        "이모지를 포함한 핵심 포인트 1",
+        "이모지를 포함한 핵심 포인트 2",
+        "이모지를 포함한 핵심 포인트 3"
       ],
       "advice_label": "💡 투자자 한 줄 전략",
-      "advice_text": "투자 전략 코멘트"
+      "advice_text": "핵심을 찌르는 투자 전략 코멘트"
     }}
   ]
 }}
 * `cards` must have exactly 3 items. Use `card-war`, `card-oil`, `card-bond` or similar thematic names for `theme_class`, `icon_class`, `tag_class`.
+* Make everything as readable as possible!
 
 News Text:
 {news_text}
